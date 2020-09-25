@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.winter.dao.PersonDao">
+
+    <!-- 封装Role的resultMap -->
+    <resultMap id="personMap" type="person">
+        <id property="id" column="id"></id>
+        <result property="personName" column="personname"></result>
+        <result property="address" column="address"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+        <collection property="roles" ofType="role">
+            <id property="id" column="rid"></id>
+            <result property="roleName" column="rolename"></result>
+            <result property="roleDesc" column="roledesc"></result>
+        </collection>
+    </resultMap>
+
+    <!--    查询所有-->
+    <select id="findAll" resultMap="personMap">
+        SELECT p.*,r.id AS rid,r.rolename,r.roledesc FROM person p
+          LEFT OUTER JOIN person_role pr ON p.id = pr.pid
+          LEFT OUTER JOIN role r ON r.id = pr.rid;
+    </select>
+
+</mapper>
